@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>키워드 품질 비교</title>
+<style>
+  :root{--bg:#f7f6f3;--surface:#fff;--ink:#1f1d1a;--muted:#6b665e;--line:#e6e2da;--primary:#6d4fd8;--soft:#efeafd;--grid:#e1e0d9;
+    --c-claude:#2a78d6;--c-codex:#eb6834;--c-gemini:#1baf7a;--c-exaone:#eda100;--c-current:#e87ba4}
+  @media (prefers-color-scheme:dark){:root{--bg:#161514;--surface:#1f1e1c;--ink:#f1eee8;--muted:#a59f95;--line:#34312c;--primary:#a78bfa;--soft:#2a2440;--grid:#2c2c2a;
+    --c-claude:#3987e5;--c-codex:#d95926;--c-gemini:#199e70;--c-exaone:#c98500;--c-current:#d55181}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+  main{max-width:960px;margin:0 auto;padding:32px 16px 64px}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .eyebrow{display:inline-block;background:var(--soft);color:var(--primary);font-size:12px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:999px}
+  h1{margin:12px 0 4px;font-size:26px}
+  .sub{color:var(--muted);margin:0 0 20px}
+  .smbtn{flex:none;font:600 13px inherit;font-family:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+  #sitemap{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  #sitemap.open{max-height:400px}
+  #sitemap .card{margin:0 0 16px}
+  #sitemap li{padding:6px 0;border:0;display:block}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:8px 0 16px;overflow-x:auto}
+  .tab{font:600 14px inherit;font-family:inherit;background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);padding:8px 12px;cursor:pointer;white-space:nowrap}
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--primary)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}
+  .card h3{margin:0 0 2px;font-size:15px}
+  .cap{color:var(--muted);font-size:12px;margin:0 0 12px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:12px}
+  .kpi .v{font-size:34px;font-weight:800;line-height:1.1;margin:4px 0}
+  .kpi .v small{font-size:15px;color:var(--muted);font-weight:600;margin-left:3px}
+  .kpi .l{color:var(--muted);font-size:13px}
+  .row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+  .hb{display:grid;grid-template-columns:96px 1fr 44px;gap:8px;align-items:center;font-size:13px;padding:5px 0}
+  .hb .t{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sw{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+  .track{height:14px;background:color-mix(in srgb,var(--grid) 60%,transparent);border-radius:4px;overflow:hidden}
+  .track i{display:block;height:100%;border-radius:0 4px 4px 0}
+  .hb .n{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  svg text{fill:var(--muted);font-size:11px}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin:8px 0 0}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  .scroll{overflow-x:auto}
+  ul{margin:0;padding-left:18px}
+  li{margin:4px 0}
+  .note{color:var(--muted);font-size:12px}
+  .empty{color:var(--muted);text-align:center;padding:28px 0}
+  #tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12px;padding:6px 8px;border-radius:6px;z-index:9;max-width:260px}
+  footer{margin-top:28px;color:var(--muted);font-size:12px}
+  .tab:focus-visible,.smbtn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div>
+      <span class="eyebrow">KW-BENCH / 2026-10</span>
+      <h1>키워드 품질 비교: 4개 AI, 10회</h1>
+      <p class="sub">AI 게재처 트래커의 두 작업 (논문 키워드 뽑기, 키워드 중영한 번역) 을 Claude, Codex, Gemini, EXAONE 이 같은 문제로 풀고, 이름을 가린 상호 채점과 Claude 최종 판정으로 비교합니다. 트래커가 지금 쓰는 결과 (현행) 도 같이 채점합니다.</p>
+    </div>
+    <button class="smbtn" type="button" aria-expanded="false" aria-controls="sitemap" id="smbtn">🗺 사이트맵</button>
+  </div>
+  <div id="sitemap"><div class="card"><ul>
+    <li><a href="./index.html">2026-10 대시보드</a> : 이 페이지를 부르는 상위 페이지</li>
+    <li><a href="https://jemmajeon.github.io/ai-venue-tracker_PB/">AI 게재처 트래커 공개 대시보드</a> : 시험 문제를 뽑은 원본 데이터 (중국 AI 권위 게재처 논문)</li>
+    <li><a href="./kw-bench.json">kw-bench.json</a> : 이 화면이 읽는 회차별 집계 원본</li>
+  </ul></div></div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="result" aria-selected="true">📊 결과</button>
+    <button class="tab" role="tab" data-tab="rounds" aria-selected="false">📈 회차별</button>
+    <button class="tab" role="tab" data-tab="method" aria-selected="false">🧪 방법</button>
+  </div>
+
+  <section data-panel="result"><div id="result"><div class="card empty">집계 불러오는 중</div></div></section>
+  <section data-panel="rounds" hidden><div id="rounds"></div></section>
+  <section data-panel="method" hidden>
+    <div class="card"><h3>문제 (1회분, 10회분을 미리 고정)</h3><ul>
+      <li>번역 30개: 중문 원문 키워드 10개 (→ 영, 한), 영문 원문 키워드 20개 (→ 중, 한)</li>
+      <li>추출 10편: 영문 초록 5편 (TPAMI, T-RO), 중문 초록 3편 (중국 학술지), 제목만 2편 (ICML)</li>
+      <li>모두 트래커가 수집한 공개 학술 데이터. 회차마다 겹치지 않음</li></ul></div>
+    <div class="card"><h3>채점 3층</h3><ul>
+      <li><b>상호 채점</b>: 4개 AI 가 각각 채점자. 문항마다 5개 답 (4개 AI + 현행) 을 A~E 로 섞어 누가 썼는지 가리고 1~5점</li>
+      <li><b>자기 선호</b>: 채점자가 자기 답에 준 점수 − 다른 채점자들이 같은 답에 준 평균. 0 보다 크면 자기 답을 후하게 본 것</li>
+      <li><b>Claude 최종 판정</b> (공식 점수): 답과 채점자 4명의 점수 (누구인지 가림) 를 보고 문항별 최종 점수와 1등을 정함</li></ul></div>
+    <div class="card"><h3>읽을 때 주의할 점</h3><ul>
+      <li>Claude 는 참가자이자 최종 판정자입니다. 그래서 자기 선호를 따로 재서 보여 줍니다.</li>
+      <li>사전 일치율의 기준인 현행 사전은 Claude 와 Gemini 가 만든 것이라 두 AI 에 유리합니다. 점수에는 넣지 않는 참고값입니다.</li>
+      <li>현행 추출 키워드에는 저자 키워드, OpenAlex 자동 키워드, AI 추출 키워드가 섞여 있습니다.</li>
+      <li>10회 = 2026-11-12 ~ 11-21 하루 1회. 한 회는 문항 40개라 회차 하나의 차이는 작게 봐야 합니다.</li></ul></div>
+  </section>
+  <footer id="foot"></footer>
+</main>
+<div id="tip" hidden></div>
+<script>
+(function () {
+  var ORDER = ["claude", "codex", "gemini", "exaone", "current"];
+  var TASKS = [["translate", "번역 (중영한)"], ["extract", "키워드 뽑기"]];
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]; }); };
+  var f2 = function (v) { return v == null ? "-" : Number(v).toFixed(2); };
+  var col = function (k) { return "var(--c-" + k + ")"; };
+
+  document.getElementById("smbtn").addEventListener("click", function () {
+    var sm = document.getElementById("sitemap"), on = !sm.classList.contains("open");
+    sm.classList.toggle("open", on); this.setAttribute("aria-expanded", on);
+  });
+  function setTab(t) {
+    document.querySelectorAll("[data-panel]").forEach(function (p) { p.hidden = p.getAttribute("data-panel") !== t; });
+    document.querySelectorAll(".tab").forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === t); });
+  }
+  document.querySelectorAll(".tab").forEach(function (b) { b.addEventListener("click", function () { setTab(b.getAttribute("data-tab")); history.replaceState(null, "", "#" + b.getAttribute("data-tab")); }); });
+  if (/^#(result|rounds|method)$/.test(location.hash)) setTab(location.hash.slice(1));
+
+  var tip = document.getElementById("tip");
+  document.addEventListener("pointermove", function (e) {
+    var el = e.target.closest && e.target.closest("[data-tip]");
+    if (!el) { tip.hidden = true; return; }
+    tip.textContent = el.getAttribute("data-tip"); tip.hidden = false;
+    var r = tip.getBoundingClientRect();
+    tip.style.left = Math.max(8, Math.min(e.clientX + 12, innerWidth - r.width - 8)) + "px";
+    tip.style.top = Math.max(8, e.clientY - r.height - 10) + "px";
+  });
+
+  function mean(xs) { xs = xs.filter(function (x) { return x != null; }); return xs.length ? xs.reduce(function (a, b) { return a + b; }, 0) / xs.length : null; }
+
+  function bars(rows, max) {
+    return rows.map(function (r) {
+      var w = r.v == null ? 0 : Math.max(2, r.v / max * 100);
+      return '<div class="hb" data-tip="' + esc(r.tip) + '"><span class="t"><span class="sw" style="background:' + col(r.k) + '"></span>' + esc(r.name) +
+        '</span><span class="track"><i style="width:' + w + '%;background:' + col(r.k) + '"></i></span><span class="n">' + f2(r.v) + '</span></div>';
+    }).join("");
+  }
+
+  function lineChart(D, task) {
+    var W = 440, H = 200, L = 28, R = 10, T = 10, B = 26, n = D.of;
+    var x = function (i) { return L + (W - L - R) * (n === 1 ? 0.5 : (i - 1) / (n - 1)); };
+    var y = function (v) { return T + (H - T - B) * (5 - v) / 4; };
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="회차별 최종 점수">';
+    [1, 2, 3, 4, 5].forEach(function (g) { s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--grid)"/><text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" text-anchor="end">' + g + "</text>"; });
+    for (var i = 1; i <= n; i++) s += '<text x="' + x(i) + '" y="' + (H - 8) + '" text-anchor="middle">' + i + "</text>";
+    ORDER.forEach(function (k) {
+      var pts = D.rounds.map(function (r) { var c = r.cands[k]; return c && c[task].final != null ? [r.round, c[task].final] : null; }).filter(Boolean);
+      if (!pts.length) return;
+      if (pts.length > 1) s += '<polyline fill="none" stroke="' + col(k) + '" stroke-width="2" points="' + pts.map(function (p) { return x(p[0]) + "," + y(p[1]); }).join(" ") + '"/>';
+      pts.forEach(function (p) { s += '<circle cx="' + x(p[0]) + '" cy="' + y(p[1]) + '" r="4.5" fill="' + col(k) + '" stroke="var(--surface)" stroke-width="2" data-tip="' + esc(D.names[k] + " " + p[0] + "회차: " + f2(p[1])) + '"/>'; });
+    });
+    return s + "</svg>";
+  }
+
+  function legend(names) {
+    return '<div class="legend">' + ORDER.map(function (k) { return '<span><i class="sw" style="background:' + col(k) + '"></i>' + esc(names[k]) + "</span>"; }).join("") + "</div>";
+  }
+
+  fetch("kw-bench.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (D) {
+    var names = D.names, rs = D.rounds;
+    document.getElementById("foot").textContent = "갱신 " + D.updated.replace("T", " ") + " | 문제 원본: AI 게재처 트래커 공개 데이터 | 답을 못 받은 회차는 '실패'로 두고 평균에서 뺍니다";
+    if (!rs.length) { document.getElementById("result").innerHTML = '<div class="card empty">첫 회차 집계 전입니다 (2026-11-12 시작).</div>'; return; }
+    var agg = {};
+    ORDER.forEach(function (k) {
+      agg[k] = {};
+      TASKS.forEach(function (t) {
+        var c = rs.map(function (r) { return r.cands[k] && r.cands[k][t[0]]; }).filter(Boolean);
+        agg[k][t[0]] = {final: mean(c.map(function (x) { return x.final; })), mutual: mean(c.map(function (x) { return x.mutual; })),
+          best: c.reduce(function (a, x) { return a + (x.best || 0); }, 0), n: c.reduce(function (a, x) { return a + (x.n || 0); }, 0)};
+      });
+      var a = rs.map(function (r) { return r.cands[k]; }).filter(Boolean);
+      agg[k].self = mean(a.map(function (x) { return x.self_pref; }));
+      agg[k].dict = mean(a.map(function (x) { return x.dict_agree; }));
+      agg[k].sec = mean(a.map(function (x) { return x.sec; }));
+      agg[k].missing = a.reduce(function (s, x) { return s + (x.missing || 0); }, 0);
+    });
+    var lead = {};
+    TASKS.forEach(function (t) { lead[t[0]] = ORDER.slice().sort(function (p, q) { return (agg[q][t[0]].final || 0) - (agg[p][t[0]].final || 0); })[0]; });
+
+    var h = '<div class="kpis"><div class="card kpi"><div class="l">진행</div><div class="v">' + D.done + "<small>/ " + D.of + "회</small></div></div>";
+    TASKS.forEach(function (t) { var k = lead[t[0]]; h += '<div class="card kpi"><div class="l">' + t[1] + ' 1위 (최종 판정 평균)</div><div class="v">' + esc(names[k]) + "<small>" + f2(agg[k][t[0]].final) + "</small></div></div>"; });
+    h += '</div><div class="row2">';
+    TASKS.forEach(function (t) {
+      var rows = ORDER.map(function (k) { var a = agg[k][t[0]]; return {k: k, name: names[k], v: a.final, tip: names[k] + ": 최종 " + f2(a.final) + ", 1등 " + a.best + "/" + a.n + "문항"}; })
+        .sort(function (p, q) { return (q.v || 0) - (p.v || 0); });
+      h += '<div class="card"><h3>' + t[1] + '</h3><p class="cap">Claude 최종 판정 평균 (1~5점), 누적 ' + D.done + "회</p>" + bars(rows, 5) + "</div>";
+    });
+    h += "</div>";
+    h += '<div class="card"><h3>보조 지표 (표 보기)</h3><p class="cap">상호 채점 = 자기 채점 제외 평균. 자기 선호 = 자기 답에 준 점수 − 남들이 준 평균. 사전 일치율 = 현행 사전과 같은 번역 비율 (참고값)</p><div class="scroll"><table><thead><tr><th>참가</th>' +
+      '<th class="n">번역 최종</th><th class="n">번역 1등</th><th class="n">번역 상호</th><th class="n">추출 최종</th><th class="n">추출 1등</th><th class="n">추출 상호</th><th class="n">자기 선호</th><th class="n">사전 일치</th><th class="n">답 시간(초)</th><th class="n">누락</th></tr></thead><tbody>';
+    ORDER.forEach(function (k) {
+      var a = agg[k], ai = k !== "current";
+      h += '<tr><td><span class="sw" style="background:' + col(k) + ';margin-right:6px"></span>' + esc(names[k]) + '</td><td class="n">' + f2(a.translate.final) + '</td><td class="n">' + a.translate.best + '</td><td class="n">' + f2(a.translate.mutual) +
+        '</td><td class="n">' + f2(a.extract.final) + '</td><td class="n">' + a.extract.best + '</td><td class="n">' + f2(a.extract.mutual) + '</td><td class="n">' + (ai ? f2(a.self) : "-") +
+        '</td><td class="n">' + (ai && a.dict != null ? Math.round(a.dict * 100) + "%" : "-") + '</td><td class="n">' + (ai && a.sec != null ? Math.round(a.sec) : "-") + '</td><td class="n">' + (ai ? a.missing : "-") + "</td></tr>";
+    });
+    h += "</tbody></table></div></div>";
+    var REL = D.reliability || {}, relKeys = ORDER.filter(function (k) { return REL[k]; }).concat(REL["claude-opus"] ? ["claude-opus"] : []);
+    if (relKeys.length) {
+      h += '<div class="card"><h3>응답 안정성 (모든 호출 기록)</h3><p class="cap">답, 상호 채점, 최종 판정 호출마다 성공 여부, 재시도, 오류 종류를 쌓은 원장 기준. 재시도 = 같은 호출을 다시 보낸 횟수</p><div class="scroll"><table><thead><tr><th>AI</th>' +
+        '<th class="n">호출</th><th class="n">성공</th><th class="n">성공률</th><th class="n">재시도</th><th>오류 (종류별 횟수)</th><th class="n">성공 호출 평균(초)</th></tr></thead><tbody>';
+      relKeys.forEach(function (k) {
+        var a = REL[k], errs = Object.keys(a.errors).map(function (e) { return e + " " + a.errors[e] + "회"; }).join(", ");
+        h += "<tr><td>" + (names[k] ? '<span class="sw" style="background:' + col(k) + ';margin-right:6px"></span>' + esc(names[k]) : "Claude opus (최종 판정)") +
+          '</td><td class="n">' + a.calls + '</td><td class="n">' + a.ok + '</td><td class="n">' + Math.round(100 * a.ok / a.calls) + '%</td><td class="n">' + a.retries +
+          "</td><td>" + (errs ? esc(errs) : "없음") + '</td><td class="n">' + (a.sec_mean == null ? "-" : Math.round(a.sec_mean)) + "</td></tr>";
+      });
+      h += '</tbody></table></div><p class="note">2026-11-11 첫 실행은 재시도 기능이 없던 때라 재시도 0으로 기록됨. EXAONE 무료 API 는 서버 혼잡 (429 "service is busy") 과 긴 응답 중단 (500) 이 잦아 스트리밍 + 최대 약 13분 재시도로 받는다.</p></div>';
+    }
+    document.getElementById("result").innerHTML = h;
+
+    var g = '<div class="row2">';
+    TASKS.forEach(function (t) { g += '<div class="card"><h3>' + t[1] + '</h3><p class="cap">회차별 Claude 최종 판정 평균. 점에 올리면 값</p>' + lineChart(D, t[0]) + legend(names) + "</div>"; });
+    g += '</div><div class="card"><h3>회차 기록</h3><div class="scroll"><table><thead><tr><th>회차</th><th>날짜</th>' + ORDER.map(function (k) { return '<th class="n">' + esc(names[k]) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    rs.forEach(function (r) {
+      g += "<tr><td>" + r.round + "</td><td>" + esc(r.date) + "</td>" + ORDER.map(function (k) { var c = r.cands[k]; return '<td class="n">' + (!c ? "-" : c.translate.failed ? "실패" : f2(c.translate.final) + " / " + f2(c.extract.final)) + "</td>"; }).join("") + "</tr>";
+    });
+    g += '</tbody></table></div><p class="note">칸 = 번역 / 추출 최종 판정 평균</p></div>';
+    var RBR = D.reliability_by_round || {}, rk = Object.keys(RBR).filter(function (k) { return k !== "0"; }).sort(function (a, b) { return a - b; });
+    if (rk.length) {
+      var who = ["claude", "codex", "gemini", "exaone", "claude-opus"];
+      g += '<div class="card"><h3>회차별 호출 성공 (실험 기록)</h3><p class="cap">칸 = 성공 / 호출 (재시도). 실패한 단계: 답, 채점, 최종. 낮은 성공률도 그대로 남긴다</p><div class="scroll"><table><thead><tr><th>회차</th>' +
+        who.map(function (k) { return '<th class="n">' + esc(names[k] || "Claude opus (최종)") + "</th>"; }).join("") + "</tr></thead><tbody>";
+      rk.forEach(function (r) {
+        g += "<tr><td>" + r + "</td>" + who.map(function (k) {
+          var a = RBR[r][k]; if (!a) return '<td class="n">-</td>';
+          var fail = a.fail_stages.length ? " | 실패: " + a.fail_stages.map(function (s) { return {answer: "답", judge: "채점", final: "최종"}[s] || s; }).join(", ") : "";
+          return '<td class="n">' + a.ok + " / " + a.calls + " (" + a.retries + ")" + esc(fail) + "</td>";
+        }).join("") + "</tr>";
+      });
+      g += "</tbody></table></div></div>";
+    }
+    document.getElementById("rounds").innerHTML = g;
+  }).catch(function () { document.getElementById("result").innerHTML = '<div class="card empty">아직 집계 전입니다.</div>'; });
+})();
+</script>
+</body>
+</html>

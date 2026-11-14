@@ -1,0 +1,503 @@
+{
+ "updated": "2026-11-15T00:15",
+ "done": 3,
+ "of": 10,
+ "start": "2026-11-12",
+ "names": {
+  "claude": "Claude",
+  "codex": "Codex",
+  "gemini": "Gemini",
+  "exaone": "EXAONE",
+  "current": "현행 (트래커)"
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "date": "2026-11-12",
+   "final_model": "claude-opus-5-5",
+   "cands": {
+    "claude": {
+     "translate": {
+      "final": 4.633,
+      "best": 9,
+      "mutual": 4.85,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.2,
+      "best": 2,
+      "mutual": 4.35,
+      "n": 10
+     },
+     "model": "claude-sonnet-5-5",
+     "sec": 26.1,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": -0.675,
+     "dict_agree": 0.533
+    },
+    "codex": {
+     "translate": {
+      "final": 4.767,
+      "best": 4,
+      "mutual": 4.533,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.8,
+      "best": 5,
+      "mutual": 4.25,
+      "n": 10
+     },
+     "model": "codex (ChatGPT 로그인 기본 모델)",
+     "sec": 39.9,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.388,
+     "dict_agree": 0.533
+    },
+    "gemini": {
+     "translate": {
+      "final": 4.6,
+      "best": 6,
+      "mutual": 4.533,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.7,
+      "best": 1,
+      "mutual": 4.1,
+      "n": 10
+     },
+     "model": "gemini-3.8-flash-high",
+     "sec": 127.6,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.475,
+     "dict_agree": 0.6
+    },
+    "exaone": {
+     "translate": {
+      "final": 4.567,
+      "best": 7,
+      "mutual": 4.556,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.2,
+      "best": 1,
+      "mutual": 4.333,
+      "n": 10
+     },
+     "model": "k-exaone_v2.5",
+     "sec": 1187.4,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": false,
+     "self_pref": null,
+     "dict_agree": 0.5
+    },
+    "current": {
+     "translate": {
+      "final": 4.567,
+      "best": 4,
+      "mutual": 4.678,
+      "n": 30
+     },
+     "extract": {
+      "final": 3.0,
+      "best": 1,
+      "mutual": 3.2,
+      "n": 10
+     }
+    }
+   }
+  },
+  {
+   "round": 2,
+   "date": "2026-11-13",
+   "final_model": "claude-opus-5-5",
+   "cands": {
+    "claude": {
+     "translate": {
+      "final": 4.8,
+      "best": 5,
+      "mutual": 4.811,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.6,
+      "best": 6,
+      "mutual": 4.6,
+      "n": 10
+     },
+     "model": "claude-sonnet-5-5",
+     "sec": 21.1,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": -0.033,
+     "dict_agree": 0.6
+    },
+    "codex": {
+     "translate": {
+      "final": 4.933,
+      "best": 6,
+      "mutual": 4.833,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.3,
+      "best": 1,
+      "mutual": 4.167,
+      "n": 10
+     },
+     "model": "codex (ChatGPT 로그인 기본 모델)",
+     "sec": 42.2,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.158,
+     "dict_agree": 0.667
+    },
+    "gemini": {
+     "translate": {
+      "final": 4.867,
+      "best": 13,
+      "mutual": 4.833,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.3,
+      "best": 1,
+      "mutual": 4.1,
+      "n": 10
+     },
+     "model": "gemini-3.8-flash-high",
+     "sec": 86.4,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.225,
+     "dict_agree": 0.6
+    },
+    "exaone": {
+     "translate": {
+      "final": 4.567,
+      "best": 5,
+      "mutual": 4.544,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.2,
+      "best": 2,
+      "mutual": 4.133,
+      "n": 10
+     },
+     "model": "k-exaone_v2.5",
+     "sec": 425.6,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.058,
+     "dict_agree": 0.433
+    },
+    "current": {
+     "translate": {
+      "final": 4.733,
+      "best": 1,
+      "mutual": 4.767,
+      "n": 30
+     },
+     "extract": {
+      "final": 3.0,
+      "best": 0,
+      "mutual": 3.2,
+      "n": 10
+     }
+    }
+   }
+  },
+  {
+   "round": 3,
+   "date": "2026-11-14",
+   "final_model": "claude-opus-5-5",
+   "cands": {
+    "claude": {
+     "translate": {
+      "final": 4.9,
+      "best": 10,
+      "mutual": 4.944,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.1,
+      "best": 1,
+      "mutual": 4.333,
+      "n": 10
+     },
+     "model": "claude-sonnet-5-5",
+     "sec": 54.8,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": -0.017,
+     "dict_agree": 0.667
+    },
+    "codex": {
+     "translate": {
+      "final": 4.7,
+      "best": 4,
+      "mutual": 4.711,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.7,
+      "best": 4,
+      "mutual": 4.567,
+      "n": 10
+     },
+     "model": "codex (ChatGPT 로그인 기본 모델)",
+     "sec": 45.2,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.175,
+     "dict_agree": 0.533
+    },
+    "gemini": {
+     "translate": {
+      "final": 4.733,
+      "best": 5,
+      "mutual": 4.678,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.1,
+      "best": 1,
+      "mutual": 4.167,
+      "n": 10
+     },
+     "model": "gemini-3.8-flash-high",
+     "sec": 111.8,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.275,
+     "dict_agree": 0.6
+    },
+    "exaone": {
+     "translate": {
+      "final": 4.6,
+      "best": 6,
+      "mutual": 4.7,
+      "n": 30
+     },
+     "extract": {
+      "final": 4.1,
+      "best": 4,
+      "mutual": 4.3,
+      "n": 10
+     },
+     "model": "k-exaone_v2.5",
+     "sec": 506.7,
+     "missing": 0,
+     "answer_ok": true,
+     "judge_ok": true,
+     "self_pref": 0.075,
+     "dict_agree": 0.533
+    },
+    "current": {
+     "translate": {
+      "final": 4.533,
+      "best": 5,
+      "mutual": 4.658,
+      "n": 30
+     },
+     "extract": {
+      "final": 3.0,
+      "best": 0,
+      "mutual": 3.275,
+      "n": 10
+     }
+    }
+   }
+  }
+ ],
+ "reliability": {
+  "claude": {
+   "calls": 7,
+   "ok": 7,
+   "retries": 0,
+   "errors": {},
+   "fails": [],
+   "sec_mean": 36.214
+  },
+  "codex": {
+   "calls": 7,
+   "ok": 7,
+   "retries": 0,
+   "errors": {},
+   "fails": [],
+   "sec_mean": 44.257
+  },
+  "gemini": {
+   "calls": 7,
+   "ok": 7,
+   "retries": 0,
+   "errors": {},
+   "fails": [],
+   "sec_mean": 103.929
+  },
+  "exaone": {
+   "calls": 8,
+   "ok": 5,
+   "retries": 13,
+   "errors": {
+    "HTTP 429": 7,
+    "HTTP 500": 1,
+    "빈 스트림": 2
+   },
+   "fails": [
+    {
+     "ts": "2026-11-11T23:43:18",
+     "round": 1,
+     "stage": "answer",
+     "errors": [
+      "HTTP 429"
+     ]
+    },
+    {
+     "ts": "2026-11-12T00:03:18",
+     "round": 1,
+     "stage": "judge",
+     "errors": [
+      "HTTP 500"
+     ]
+    },
+    {
+     "ts": "2026-11-12T01:39:24",
+     "round": 1,
+     "stage": "judge",
+     "errors": [
+      "빈 스트림"
+     ]
+    }
+   ],
+   "sec_mean": 832.26
+  },
+  "claude-opus": {
+   "calls": 4,
+   "ok": 4,
+   "retries": 0,
+   "errors": {},
+   "fails": [],
+   "sec_mean": 148.775
+  }
+ },
+ "reliability_by_round": {
+  "1": {
+   "claude": {
+    "calls": 3,
+    "ok": 3,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "codex": {
+    "calls": 3,
+    "ok": 3,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "gemini": {
+    "calls": 3,
+    "ok": 3,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "exaone": {
+    "calls": 4,
+    "ok": 1,
+    "retries": 6,
+    "fail_stages": [
+     "answer",
+     "judge",
+     "judge"
+    ]
+   },
+   "claude-opus": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   }
+  },
+  "2": {
+   "claude": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "codex": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "gemini": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "exaone": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 1,
+    "fail_stages": []
+   },
+   "claude-opus": {
+    "calls": 1,
+    "ok": 1,
+    "retries": 0,
+    "fail_stages": []
+   }
+  },
+  "3": {
+   "claude": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "codex": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "gemini": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 0,
+    "fail_stages": []
+   },
+   "exaone": {
+    "calls": 2,
+    "ok": 2,
+    "retries": 6,
+    "fail_stages": []
+   },
+   "claude-opus": {
+    "calls": 1,
+    "ok": 1,
+    "retries": 0,
+    "fail_stages": []
+   }
+  }
+ }
+}
